@@ -22,11 +22,6 @@ class IcoFace:
         self.x2 = b
         self.x3 = c
 
-        # Take x1 as the base point, then calculate displacements to x2 and x3
-        # Take the vector x1->x2 as the base point??
-
-        # Calculate all the intermediate points here??
-
     def Print_Vertices(self):
         self.x1.Print_Cartesian()
         self.x2.Print_Cartesian()
@@ -34,7 +29,6 @@ class IcoFace:
 
     def Get_Edges_Equal_Angles(self):
         # Calculate the edge coordinates based on the division of the angle between the points
-        print "Function: Get_Edges_Equal_Angles\n"
 
         ret_list = list()
 
@@ -42,8 +36,6 @@ class IcoFace:
         x0 = self.x1
         y0 = self.x2
         z0 = self.x3
-
-
 
         delta_theta_x1x2 = (y0.theta - x0.theta)/self.freq_n
         delta_phi_x1x2 = (y0.phi - x0.phi)/self.freq_n
@@ -57,17 +49,6 @@ class IcoFace:
             delta_theta_x1x2 = 0
         if (delta_theta_x1x3 > -CF.TINY) and (delta_theta_x1x3 < CF.TINY):
             delta_theta_x1x3 = 0
-
-        print "Delta: thetax1x2= " + str(delta_theta_x1x2) + " phi_x1x2= " + str(delta_phi_x1x2)
-
-        print "Delta: thetax1x3= " + str(delta_theta_x1x3) + " phi_x1x3= " + str(delta_phi_x1x3)
-
-        # Third difference would be the radius but this is constant so no need!
-
-        #print "Delta theta x1x2: " + str(delta_theta_x1x2)
-
-
-
 
 
         for i in range(0,self.freq_n+1):
@@ -102,11 +83,9 @@ class IcoFace:
 						
 
                 e1 = E.Edge("edge" + str(CF.nEdge) )
-                # Test
                 e1.Set_Edge_Number( CF.nEdge )
                 e1.Set_Points( a, b )
                 CF.nEdge += 1
-                #print "Edge number: " + str(CF.nEdge)
 
                 e2 = E.Edge("edge" + str(CF.nEdge) )
                 e2.Set_Edge_Number( CF.nEdge )
@@ -131,9 +110,6 @@ class IcoFace:
         # Return all the points/vertices of the face divided into equilateral triangles based on the frequency
 
         ret_list = list()
-
-        # Where to store the list of points and edges???
-        # Global variables?????
 
         # Coordinates of the starting point
         x0 = self.x1.x
@@ -175,11 +151,9 @@ class IcoFace:
 				
 
                 e1 = E.Edge("edge" + str(CF.nEdge) )
-                # Test
                 e1.Set_Edge_Number( CF.nEdge )
                 e1.Set_Points( a, b )
                 CF.nEdge += 1
-                #print "Edge number: " + str(CF.nEdge)
 
                 e2 = E.Edge("edge" + str(CF.nEdge) )
                 e2.Set_Edge_Number( CF.nEdge )

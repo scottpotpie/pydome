@@ -15,21 +15,19 @@ import IcoFace as F
 import GeoSphere as G
 import config as CF
 
-print "Coordinates"
+print "/**********************************************************/"
+print " *     Geodesic Dome Calculator - PyDome                  *"
+print " *     Version 0.1                                        *"
+print " *     ausrockets.blogspot.com.au                         *"
+print "/**********************************************************/"
+
 
 #------------------------------------------------------------------
-# Inputs
+# User Defined Inputs
 
-R_mm = 6000        # Radius of the circle in millimeters
+R_mm = 6000         # Radius of the circle in millimeters
 frequency_n = 6     # Frequency of the geodesic
-
-# Test case:
-#       frequency_n = 1
-#       
-# Result:
-#       Vertex count    = 18
-#       Edge count      = 
-#       Edge length     =
+Sphere_calc = True  # Calculate points for sphere or dome
 
 #------------------------------------------------------------------
 
@@ -40,22 +38,19 @@ t3_rad = -3 * math.pi / 10
 t4_rad = math.pi / 5
 
 S_mm = 2 * R_mm * math.sin(t4_rad)           # Side Length	
-print "S = ", S_mm
 
 H_mm= math.cos(t4_rad) * R_mm           # Height of triangle
-print "Height of triangle: ", H_mm
+
 Cx_mm = R_mm * math.cos(t2_rad)
 Cy_mm = R_mm * math.sin(t2_rad)
 	
 H1_mm = math.sqrt( S_mm * S_mm - R_mm * R_mm )
-print "H1: ", H1_mm
 H2_mm = math.sqrt((H_mm+R_mm)*(H_mm+R_mm) - (H_mm*H_mm))
-print "H2: ", H2_mm
+
 	
 Z2_mm = (H2_mm-H1_mm)/2          # Coordinate point (b-f)
-print "Z2: ", Z2_mm
 Z1_mm = Z2_mm + H1_mm          # Coordinate point (a)	
-print "Z1: ", Z1_mm
+
 
 #-------------------------------------------
 # Icosahedron Coordinate Equations
@@ -73,11 +68,7 @@ print "Z1: ", Z1_mm
 # k = (  Cx, -Cy, -Z2)
 # l = (   0,   0, -Z1)
 
-gs = G.GeoSphere("10m Dome", frequency_n, R_mm);
-
-#VertexList = list()
-
-
+gs = G.GeoSphere("Sphere", frequency_n, R_mm);
 
 # Test coordinates
 #t1 = C.Coordinates("t1")
@@ -181,14 +172,11 @@ gs.Add_Vertex(l)
 
 # Test Face Only
 #gs.Add_Face( t1, t2, t3 )
-
+#gs.Print_Vertices()
 
 # Icosahedron faces
 
 gs.Add_Face( a, b, c )
-
-
-gs.Print_Vertices()
 gs.Add_Face( a, c, d )
 gs.Add_Face( a, d, e )
 gs.Add_Face( a, e, f )
@@ -218,11 +206,13 @@ gs.Add_Face( l, g, k )
 
 
 
-
+#---------------------------------
+# Calculations
 
 
 # Set all the radius lenghts the same, ie project all points onto the sphere of radius Z1_mm
 # If this is commented out then the points will be plotted on the original icosahedron
+
 
 
 
@@ -248,47 +238,55 @@ gs.Set_Edges_Pt_Radius( R_mm )
 # For each point find the edges which meet there
 gs.Hub_List_From_Edges()
 
+#---------------------------------
+# Print Results
 
-# Print the CATIA details
-# FIX: point this to use the points hash
+print "\n\n/**********************************************************/"
+print " *     Points                                             *"
+print "/**********************************************************/"
+
 gs.Print_Points()
-gs.Print_Edges()
-gs.Print_Vertices()
+#gs.Print_Edges()
+#gs.Print_Vertices()
 
 
-# Print the edges list??
-#print "GS.POINT_LIST Printing\n"
-#for a in gs.Point_List:
+print "\n\n/**********************************************************/"
+print " *     Edges                                              *"
+print "/**********************************************************/"
+
+
 for a in gs.Point_Hash.keys():
     a.Print_Edges()
 
+
+
+print "\n\n/**********************************************************/"
+print " *     Summary                                            *"
+print "/**********************************************************/"
+
+
+print "Frequency: " + str(frequency_n)
+print "Radius (mm): " + str(R_mm)
+
+print "Number of points: ", len(gs.Point_Hash.keys())
+print "Number of edges: ", len(gs.Temp_Edge_List)
+
 # Print the count of the hubs
 gs.Count_Point_Intersections()
-
-print "Hub count:", len(gs.Hub_Count)
-
-print gs.Hub_Count
 
 
 # Print the count of edge lengths
 gs.Count_Edge_Lengths()
 
-print "Length: ", len(gs.Edge_Count)
+print "\nNumber of Edge Lengths: ", len(gs.Edge_Count)
 
 for b in gs.Edge_Count.keys():
-    print "Length: " + str(b) + " - Count: " + str(gs.Edge_Count[b])
-#print gs.Edge_Count
+    print "\tLength: " + str(b) + "\t- Count: " + str(gs.Edge_Count[b])
 
 
-# Summary of data
-print "Number of vertices: ", len(gs.Vertex_List)
-print "Number of points: ", len(gs.Point_Hash.keys())
-print "Number of edges: ", len(gs.Temp_Edge_List)
-print "Final number of edges: ", len(gs.Edge_List)
+print "\nHub details:"
 
-#print sorted(gs.Edge_Count, key=lambda key: gs.Edge_Count[key])
+for h in gs.Hub_Count.keys():
+    print "\tCount of " + str(h) + "-edged hub = " + str(gs.Hub_Count[h])
 
-
-
-
-
+# End of program

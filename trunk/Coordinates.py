@@ -15,6 +15,7 @@ class Coordinates(object):
     TINY = Decimal(1e-4)
 
     def __init__(self, n):
+
         self.x=Decimal(0)
         self.y=Decimal(0)
         self.z=Decimal(0)
@@ -31,6 +32,7 @@ class Coordinates(object):
         self.edge_count = 0
         
     def Set_Cartesian( self, a, b, c ):
+
         self.x = Decimal(a).quantize(Decimal(10)**-10).normalize()
         self.y = Decimal(b).quantize(Decimal(10)**-10).normalize()
         self.z = Decimal(c).quantize(Decimal(10)**-10).normalize()
@@ -42,10 +44,8 @@ class Coordinates(object):
         self.theta = Decimal( M.acos( self.z / self.r ) )
         self.phi = Decimal( M.atan2( self.y , self.x ) )
 
-    def Print_Cartesian(self):
-        print self.name," = (",self.x,", ",self.y,", ",self.z,")"
-
     def Set_Radius( self, r):
+
         self.r = r
 
         #Recalculate the cartesian coordinates
@@ -90,8 +90,14 @@ class Coordinates(object):
 
 
     def Print_Polar(self):
+
         print self.name," = ( r=",self.r,", theta=",self.theta,", phi=",self.phi,")"
 
+    def Get_Cartesian(self):
+
+        desc = self.name + " = (" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + ")"
+
+        return desc
 
     def __add__(self, other):
 
@@ -102,32 +108,23 @@ class Coordinates(object):
 
 
     def __eq__(self, other):
+
         if isinstance(other, Coordinates):
 
-            #if self.name == 'Pt44' or self.name == 'Pt14':
-            #    print "Matching: " + other.name
-
-
-            # Fix this rounding, not working correctly???
-#            if self.x == other.x and self.y == other.y and self.z == other.z:
-
-#            if ( Decimal(self.x) > (Decimal(other.x) - self.TINY) ) and (Decimal(self.x) < (Decimal(other.x) + self.TINY )) and ( Decimal(self.y) > (Decimal(other.y) - self.TINY) ) and (Decimal(self.y) < (Decimal(other.y) + self.TINY )) and ( Decimal(self.z) > (Decimal(other.z) - self.TINY) ) and (Decimal(self.z) < (Decimal(other.z) + self.TINY )):
-
+            # Compare only to 5 decimal places.
             if ( round( self.x, 5 ) == round( other.x, 5 )) and ( round( self.y, 5 ) == round( other.y, 5 )) and ( round( self.z, 5 ) == round( other.z, 5 )):
-            
-            #and ( self.y > other.y - self.TINY) and (self.y < other.y + self.TINY ) and ( self.z > other.z - self.TINY) and (self.z < other.z + self.TINY ):
-                #print "Matched: " + str(self.x) + "=" + str(other.x) + " " + str(self.y) + "=" + str(other.y) + "\n"
                 return True
             else:
-                # print the edge names to be able to match.
                 return False
         return NotImplemented
 
 
     def __hash__(self):
+
         return hash((self.x,self.y,self.z))
 
     def __mul__(self, other):
+
         #note that there are much better ways to write this
         #code, here we're trying to write self-explanatory code
         #instead of "good" code
@@ -145,21 +142,22 @@ class Coordinates(object):
         return a
     
     def dot( self, other ):
+
         # Vector dot product operator
         return M.sqrt( self.x * other.x + self.y * other.y + self.z * other.z )    
 
     def cross( self, b):
+
         # Not Implemented - here for completeness
         return Coordinates("ans")
        
     def __repr__(self):
+
         return self.name + " = [ " + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + "]"
 
     def Get_CATIA_Desc(self):
-        # Return the string for the insertion of the CATIA point
-        #return "CATIA" + self.name
 
-        # Set the point number to make sure edges align??
+        # Return the string of VB code for the creation of the CATIA point
 
         self.cat_desc = "Set hybridShapePointCoord" + str(self.point_number) + " = hybridShapeFactory1.AddNewPointCoord(" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + ")\n"
         self.cat_desc = self.cat_desc + "body1.InsertHybridShape hybridShapePointCoord" + str(self.point_number) + "\n" + "part1.InWorkObject = hybridShapePointCoord" + str(self.point_number) + "\n"
@@ -168,19 +166,16 @@ class Coordinates(object):
         return self.cat_desc
 
     def Set_Point_Number(self, nbr):
+
         self.point_number = nbr
                                          
     def Add_Edge(self, ed):
+
         self.Edge_List.append(ed)
 
     def Print_Edges(self):
 
-        print "Point " + self.name + " Edge List:\n"
+        print "\nPoint " + self.name + " Edge List:\n----------------------------------"
 
         for e in self.Edge_List:
             e.Print_Data()
-
-        # What about if the same edge is added twice??
-
-
-        
