@@ -49,14 +49,21 @@ class GeoSphere:
     def Print_Points(self):
 
         for x in self.Point_Hash.keys():
-            #print x
-            print x.Print_Polar()
+
+            #print x.Print_Polar()
+            print x.Get_Cartesian()
+
             #print x.Get_CATIA_Desc()
 
     def Print_Vertices(self):
+
+        print "Print Vertices: " + str(len(self.Vertex_List))
+
         for x in self.Vertex_List:
-            #print x    
-            print x.Print_Polar()
+            #print x.Print_Polar()
+
+            print x.Get_Cartesian()
+            
             #print x.Get_CATIA_Desc()
 
     def Print_Edges(self):
@@ -89,18 +96,21 @@ class GeoSphere:
 
     def Add_Face( self, a, b, c):
 
-        #global n_point
-
         F1 = IF.IcoFace( a.name + b.name + c.name, self.freq_n)
         F1.Set_Vertices( a,b,c)
 
         self.FaceList.append( F1 )
-        
-        print "Adding Face: ", F1
 
-        # Get the list of edges
-        #edge_list = F1.Get_Edges_Equal_Distance()
-        edge_list = F1.Get_Edges_Equal_Angles()
+
+        #----------------------------------------------------
+        # Use this function to divide faces by equal distance
+        #
+        edge_list = F1.Get_Edges_Equal_Distance()
+        
+        #----------------------------------------------------
+        # Use this function to divide faces by equal angle
+        #
+        #edge_list = F1.Get_Edges_Equal_Angles()
      
 
         for e in edge_list:
@@ -120,10 +130,6 @@ class GeoSphere:
     def Remove_Duplicate_Edges(self):
         # Double check the edge list for dupes
 
-        print "Function: Remove_Duplicate_Edges\n"
-
-        #self.Edge_List = list()
-
         for e in self.Updated_Edge_List:
 
             found = False
@@ -137,14 +143,8 @@ class GeoSphere:
 
             # Otherwise dont add it to the list
                 
-
-
-
-
     def Point_List_From_Edges(self):
-        # All faces added, get a list of unique points
-
-        print "Function: Point_List_From_Edges\n"       
+        # All faces added, get a list of unique points    
 
         for c in self.Temp_Edge_List:
 
@@ -212,12 +212,11 @@ class GeoSphere:
         return None
 
     def Create_New_Edges(self):
-        print "Function: Create_New_Edges\n"
 
         # For each existing edge, create a new edge with the right edge numbers!!
         for old_edge in self.Temp_Edge_List:
             
-            new_edge = E.Edge("Renum" + str(self.nEdge_Number) )
+            new_edge = E.Edge("Edge" + str(self.nEdge_Number) )
             self.nEdge_Number += 1
 
             pt1 = self.Get_Point( old_edge.x1 )
@@ -232,7 +231,6 @@ class GeoSphere:
 
     def Remove_Duplicate_Pt_From_Edges(self):
         # Once we have the list of unique points, replace the old points in the edges
-        print "Function: Remove_Duplicate_Pt_From_Edges\n"
 
         for e in self.Temp_Edge_List:
             #print "Checking edge: ", e
@@ -276,16 +274,12 @@ class GeoSphere:
     def Hub_List_From_Edges(self):
         # For each point, scan the Edge_List and get all the associated edges
 
-        print "Function: Hub_List_From_Edges\n"
-
         # This is still matching old points??? Hence getting double numbers?? Or duplicate edges not getting removed??
 
         for pt in self.Point_Hash.keys():
-#        for pt in self.Point_List:
             for e in self.Updated_Edge_List:
                 if e.x1 == pt or e.x2 == pt:
                     # Add edge to the point list.
-                    #print "test"
                     pt.Add_Edge(e)
 
 

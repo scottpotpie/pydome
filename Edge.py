@@ -31,8 +31,13 @@ class Edge:
 
 
     def __repr__(self):
-        #return "\n" + self.name + " --- \n" + str(self.x1.name) + "\n - \n" + str(self.x2.name) #+ " : " + str(self.length)
+        return "\n" + self.name + " --- \n" + str(self.x1.name) + "\n - \n" + str(self.x2.name) #+ " : " + str(self.length)
+
         
+    def Print_CATIA_Desc(self):
+
+        #
+
         self.ret_string = "Set hybridShapePointCoord1 = hybridShapes1.Item(\"Point." + str(self.x1.point_number) + "\")\n"
         self.ret_string += "Set reference1 = part1.CreateReferenceFromObject(hybridShapePointCoord1)\n" 
         self.ret_string += "Set hybridShapePointCoord2 = hybridShapes1.Item(\"Point." + str(self.x2.point_number) + "\")\n" 
@@ -46,7 +51,7 @@ class Edge:
         return self.ret_string
 
     def Print_Data(self):
-        print self.name + ": " + str(self.x1) + " - " + str(self.x2) + "\n"
+        print self.name + ": " + str(self.x1) + " - " + str(self.x2)
 
 
     
