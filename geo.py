@@ -17,19 +17,12 @@ import config as CF
 
 print "/**********************************************************/"
 print " *     Geodesic Dome Calculator - PyDome                  *"
-print " *     Version 0.1                                        *"
-print " *     ausrockets.blogspot.com.au                         *"
+print " *     Version 0.2                                        *"
+print " *     http://ausrockets.blogspot.com.au                  *"
 print "/**********************************************************/"
 
 
-#------------------------------------------------------------------
-# User Defined Inputs
 
-R_mm = 6000         # Radius of the circle in millimeters
-frequency_n = 6     # Frequency of the geodesic
-Sphere_calc = True  # Calculate points for sphere or dome
-
-#------------------------------------------------------------------
 
 #Centre angle of pentagon
 t1_rad = 2 * math.pi / 5
@@ -37,23 +30,24 @@ t2_rad = math.pi / 10
 t3_rad = -3 * math.pi / 10
 t4_rad = math.pi / 5
 
-S_mm = 2 * R_mm * math.sin(t4_rad)           # Side Length	
+S_mm = 2 * CF.R_mm * math.sin(t4_rad)      # Side Length	
 
-H_mm= math.cos(t4_rad) * R_mm           # Height of triangle
+H_mm= math.cos(t4_rad) * CF.R_mm           # Height of triangle
 
-Cx_mm = R_mm * math.cos(t2_rad)
-Cy_mm = R_mm * math.sin(t2_rad)
+Cx_mm = CF.R_mm * math.cos(t2_rad)
+Cy_mm = CF.R_mm * math.sin(t2_rad)
 	
-H1_mm = math.sqrt( S_mm * S_mm - R_mm * R_mm )
-H2_mm = math.sqrt((H_mm+R_mm)*(H_mm+R_mm) - (H_mm*H_mm))
+H1_mm = math.sqrt( S_mm * S_mm - CF.R_mm * CF.R_mm )
+H2_mm = math.sqrt((H_mm+CF.R_mm)*(H_mm+CF.R_mm) - (H_mm*H_mm))
 
 	
-Z2_mm = (H2_mm-H1_mm)/2          # Coordinate point (b-f)
-Z1_mm = Z2_mm + H1_mm          # Coordinate point (a)	
+Z2_mm = (H2_mm-H1_mm)/2          # Coordinate of points (b-f)
+Z1_mm = Z2_mm + H1_mm            # Coordinate of point (a)	
 
 
 #-------------------------------------------
 # Icosahedron Coordinate Equations
+#   http://www.vb-helper.com/tutorial_platonic_solids.html
 #
 # a = (   0,   0,  Z1)
 # b = (   0,   R,  Z2)
@@ -68,7 +62,7 @@ Z1_mm = Z2_mm + H1_mm          # Coordinate point (a)
 # k = (  Cx, -Cy, -Z2)
 # l = (   0,   0, -Z1)
 
-gs = G.GeoSphere("Sphere", frequency_n, R_mm);
+gs = G.GeoSphere("Sphere", CF.frequency_n, CF.R_mm);
 
 # Test coordinates
 #t1 = C.Coordinates("t1")
@@ -99,7 +93,7 @@ CF.nPoint += 1
 gs.Add_Vertex(a)
 
 b = C.Coordinates("b")
-b.Set_Cartesian( 0, R_mm, Z2_mm )
+b.Set_Cartesian( 0, CF.R_mm, Z2_mm )
 b.Set_Point_Number( CF.nPoint )
 CF.nPoint += 1
 gs.Add_Vertex(b)
@@ -129,7 +123,7 @@ CF.nPoint += 1
 gs.Add_Vertex(f)
 
 g = C.Coordinates("g")
-g.Set_Cartesian(0, -R_mm, -Z2_mm)
+g.Set_Cartesian(0, -CF.R_mm, -Z2_mm)
 g.Set_Point_Number( CF.nPoint )
 CF.nPoint += 1
 gs.Add_Vertex(g)
@@ -165,16 +159,16 @@ CF.nPoint += 1
 gs.Add_Vertex(l)
 
 
-#------------------------------------------
-# Add the 18 faces to the object
+#---------------------------------------------
+# Add the 20 icosahedron faces to the object
 #
-# Top 5 faces
+
 
 # Test Face Only
 #gs.Add_Face( t1, t2, t3 )
 #gs.Print_Vertices()
 
-# Icosahedron faces
+# Top 5 faces
 
 gs.Add_Face( a, b, c )
 gs.Add_Face( a, c, d )
@@ -210,13 +204,6 @@ gs.Add_Face( l, g, k )
 # Calculations
 
 
-# Set all the radius lenghts the same, ie project all points onto the sphere of radius Z1_mm
-# If this is commented out then the points will be plotted on the original icosahedron
-
-
-
-
-
 # Once all faces added, derive list of unique points
 gs.Point_List_From_Edges()
 
@@ -226,14 +213,8 @@ gs.Create_New_Edges()
 # Remove duplicate edges as faces joining up will have the same edge
 gs.Remove_Duplicate_Edges()
 
-# DEBUG - print the raw hash of points
-#print "Points Hash: " + str(gs.Point_Hash)
-
 # Set all the points to have the same radius
-gs.Set_Edges_Pt_Radius( R_mm )
-
-#gs.Set_Edges_Pt_Radius( Z1_mm )
-
+gs.Set_Edges_Pt_Radius( CF.R_mm )
 
 # For each point find the edges which meet there
 gs.Hub_List_From_Edges()
@@ -245,18 +226,24 @@ print "\n\n/**********************************************************/"
 print " *     Points                                             *"
 print "/**********************************************************/"
 
-gs.Print_Points()
-#gs.Print_Edges()
-#gs.Print_Vertices()
+for p in gs.Point_Hash.keys():
+    print p.Get_Cartesian_Coordinates()
 
 
 print "\n\n/**********************************************************/"
 print " *     Edges                                              *"
 print "/**********************************************************/"
 
+for e in gs.Edge_List:
+    print e.Get_Edge_Coordinates()
 
-for a in gs.Point_Hash.keys():
-    a.Print_Edges()
+print "\n\n/**********************************************************/"
+print " *     Hubs                                              *"
+print "/**********************************************************/"
+
+
+for h in gs.Point_Hash.keys():
+    h.Print_Edges()
 
 
 
@@ -265,8 +252,8 @@ print " *     Summary                                            *"
 print "/**********************************************************/"
 
 
-print "Frequency: " + str(frequency_n)
-print "Radius (mm): " + str(R_mm)
+print "Frequency: " + str(CF.frequency_n)
+print "Radius (mm): " + str(CF.R_mm)
 
 print "Number of points: ", len(gs.Point_Hash.keys())
 print "Number of edges: ", len(gs.Temp_Edge_List)
@@ -288,5 +275,20 @@ print "\nHub details:"
 
 for h in gs.Hub_Count.keys():
     print "\tCount of " + str(h) + "-edged hub = " + str(gs.Hub_Count[h])
+
+
+#-------------------------------------------------------------------------
+# Option - print CAD formatted results
+# Comment out these lines if you do not need
+# Modify these functions in Coordinates.py and Edges.py for other formats
+
+# Create custom points text
+#for p in gs.Point_Hash.keys():
+#    print p.Get_CATIA_Desc()
+
+# Create custom edges text
+#for e in gs.Edge_List:
+#    print e.Get_CATIA_Desc()
+
 
 # End of program

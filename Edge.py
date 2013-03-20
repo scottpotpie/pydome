@@ -34,9 +34,9 @@ class Edge:
         return "\n" + self.name + " --- \n" + str(self.x1.name) + "\n - \n" + str(self.x2.name) #+ " : " + str(self.length)
 
         
-    def Print_CATIA_Desc(self):
+    def Get_CATIA_Desc(self):
 
-        #
+        # Create the VB script code to generate a line between two points
 
         self.ret_string = "Set hybridShapePointCoord1 = hybridShapes1.Item(\"Point." + str(self.x1.point_number) + "\")\n"
         self.ret_string += "Set reference1 = part1.CreateReferenceFromObject(hybridShapePointCoord1)\n" 
@@ -50,8 +50,9 @@ class Edge:
 
         return self.ret_string
 
-    def Print_Data(self):
-        print self.name + ": " + str(self.x1) + " - " + str(self.x2)
+
+    def Get_Edge_Coordinates(self):
+        return self.name + ": " + str(self.x1) + " - " + str(self.x2)
 
 
     

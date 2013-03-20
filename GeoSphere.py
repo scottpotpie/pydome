@@ -46,14 +46,6 @@ class GeoSphere:
         for x in self.Point_List:
             print x.Get_CATIA_Desc()
 
-    def Print_Points(self):
-
-        for x in self.Point_Hash.keys():
-
-            #print x.Print_Polar()
-            print x.Get_Cartesian()
-
-            #print x.Get_CATIA_Desc()
 
     def Print_Vertices(self):
 
@@ -76,12 +68,8 @@ class GeoSphere:
         n = 1
 
         for x in self.Point_List:
-            
-            #print "Changing PT: " + str(x.point_number) + "->" + str(n) + "\n"            
             x.point_number = n
-
             n += 1
-
 
 
     def Set_Edges_Pt_Radius(self, rad_mm):
@@ -101,7 +89,6 @@ class GeoSphere:
 
         self.FaceList.append( F1 )
 
-
         #----------------------------------------------------
         # Use this function to divide faces by equal distance
         #
@@ -109,21 +96,28 @@ class GeoSphere:
         
         #----------------------------------------------------
         # Use this function to divide faces by equal angle
-        #
-        #edge_list = F1.Get_Edges_Equal_Angles()
-     
+        # 20/3/2013 - Not working yet, needs more work
+        #edge_list = F1.Get_Edges_Equal_Angles()     
 
         for e in edge_list:
 
+            # For Domes ignore any edges below the Z plane
+            if ( C.Dome_calc == True ) and (( e.x1.z < 0 ) or ( e.x2.z < 0 )): 
+                #print "Ignoring edge " + e.name + " x1.z = " + str(e.x1.z) + " x2.z = " + str(e.x2.z)
+                continue # Continue with next 'e' in the FOR loop
+
+
+            # Otherwise add the edge
             edge_found = False
 
-            # Keep them in list, ready to dedupe!
+            # Keep them in a temp list to dedupe once all loaded
             for x in self.Temp_Edge_List:
                 if e == x:
                     edge_found = True
                 
             if edge_found == False:
                 self.Temp_Edge_List.append(e)
+
 
 
 
