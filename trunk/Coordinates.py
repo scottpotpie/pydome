@@ -93,7 +93,7 @@ class Coordinates(object):
 
         print self.name," = ( r=",self.r,", theta=",self.theta,", phi=",self.phi,")"
 
-    def Get_Cartesian(self):
+    def Get_Cartesian_Coordinates(self):
 
         desc = self.name + " = (" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + ")"
 
@@ -178,4 +178,4 @@ class Coordinates(object):
         print "\nPoint " + self.name + " Edge List:\n----------------------------------"
 
         for e in self.Edge_List:
-            e.Print_Data()
+            print e.Get_Edge_Coordinates()
