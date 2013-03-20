@@ -165,9 +165,13 @@ class Coordinates(object):
 
         return self.cat_desc
 
+    def Get_Point_Number(self):
+        return self.point_number
+
     def Set_Point_Number(self, nbr):
 
         self.point_number = nbr
+        self.name = "Pt" + str(nbr)
                                          
     def Add_Edge(self, ed):
 
@@ -179,3 +183,6 @@ class Coordinates(object):
 
         for e in self.Edge_List:
             print e.Get_Edge_Coordinates()
+
+    def __cmp__(self, other):
+        return cmp(self.point_number, other.point_number)

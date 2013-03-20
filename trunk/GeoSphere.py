@@ -62,14 +62,14 @@ class GeoSphere:
         for x in self.Edge_List:
             print x
 
-    def Renumber_Points(self):
+    #def Renumber_Points(self):
         # Since some points will be dupes the numbers are not incremental.
         # Renumber them in order so that they will match the CATIA details
-        n = 1
+    #    n = 1
 
-        for x in self.Point_List:
-            x.point_number = n
-            n += 1
+    #    for x in self.Point_List:
+    #        x.point_number = n
+    #        n += 1
 
 
     def Set_Edges_Pt_Radius(self, rad_mm):
@@ -145,6 +145,9 @@ class GeoSphere:
             self.Add_Point_To_List( c.x1 )
             self.Add_Point_To_List( c.x2 )
 
+            # The numbers are getting lost when the point already exists!!
+            # How to update the copy
+
 
 
     def Add_Point_To_List(self, pt):
@@ -157,18 +160,19 @@ class GeoSphere:
 
             #if point_found == False:
 
+            
+
             if pt not in self.Point_Hash:
 
                 # Fix the number once its a new point
                 pt.point_number = self.nPoint_Number
                 pt.name = "Pt" + str(self.nPoint_Number)
 
-                #print "Adding point to list: " + pt.name + "\n"
 
-                #self.Point_List.append(pt)
-
-                if pt not in self.Point_Hash:
-                    self.Point_Hash[pt] = pt
+                #if pt not in self.Point_Hash:
+                self.Point_Hash[pt] = pt
+                #else:
+                #    print "Found in Point_Hash: " + pt
 
                 self.nPoint_Number += 1
 

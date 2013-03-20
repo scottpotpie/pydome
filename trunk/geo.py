@@ -214,7 +214,7 @@ gs.Create_New_Edges()
 gs.Remove_Duplicate_Edges()
 
 # Set all the points to have the same radius
-gs.Set_Edges_Pt_Radius( CF.R_mm )
+#gs.Set_Edges_Pt_Radius( CF.R_mm )
 
 # For each point find the edges which meet there
 gs.Hub_List_From_Edges()
@@ -226,7 +226,7 @@ print "\n\n/**********************************************************/"
 print " *     Points                                             *"
 print "/**********************************************************/"
 
-for p in gs.Point_Hash.keys():
+for p in sorted(gs.Point_Hash.keys()):
     print p.Get_Cartesian_Coordinates()
 
 
@@ -283,12 +283,13 @@ for h in gs.Hub_Count.keys():
 # Modify these functions in Coordinates.py and Edges.py for other formats
 
 # Create custom points text
-#for p in gs.Point_Hash.keys():
-#    print p.Get_CATIA_Desc()
+for p in sorted(gs.Point_Hash.keys()):
+    # Need to sort in the number order
+    print p.Get_CATIA_Desc()
 
 # Create custom edges text
-#for e in gs.Edge_List:
-#    print e.Get_CATIA_Desc()
+for e in gs.Edge_List:
+    print e.Get_CATIA_Desc()
 
 
 # End of program
