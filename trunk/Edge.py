@@ -26,8 +26,11 @@ class Edge:
         t1 = M.pow((self.x1.x - self.x2.x),2)
         t2 = M.pow((self.x1.y - self.x2.y),2)
         t3 = M.pow((self.x1.z - self.x2.z),2)
+        
+        ans = M.sqrt( t1 + t2 + t3 )
+        dans = Decimal(str(ans)).quantize(Decimal(10) ** -2)
 
-        return Decimal(M.sqrt( t1 + t2 + t3 )).quantize(Decimal(10) ** -2)
+        return dans
 
 
     def __repr__(self):

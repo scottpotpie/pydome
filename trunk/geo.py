@@ -10,6 +10,7 @@
 #----------------------------------------------------------------
 
 import math
+import decimal as D
 import Coordinates as C
 import IcoFace as F
 import GeoSphere as G
@@ -21,28 +22,33 @@ print " *     Version 0.2                                        *"
 print " *     http://ausrockets.blogspot.com.au                  *"
 print "/**********************************************************/"
 
-
+dPi = D.Decimal( str(math.pi) )
 
 
 #Centre angle of pentagon
-t1_rad = 2 * math.pi / 5
-t2_rad = math.pi / 10
-t3_rad = -3 * math.pi / 10
-t4_rad = math.pi / 5
+t1_rad = D.Decimal(2 * dPi / 5)
+t2_rad = D.Decimal( dPi / 10)
+t3_rad = D.Decimal(-3 * dPi / 10)
+t4_rad = D.Decimal(dPi / 5)
 
-S_mm = 2 * CF.R_mm * math.sin(t4_rad)      # Side Length	
+S_mm_t = 2 * CF.R_mm * math.sin(t4_rad)     # Side Length	
+S_mm = D.Decimal( str(S_mm_t) )
 
-H_mm= math.cos(t4_rad) * CF.R_mm           # Height of triangle
+H_mm_t = math.cos(t4_rad) * CF.R_mm           # Height of triangle
+H_mm = D.Decimal( str(H_mm_t) )
 
-Cx_mm = CF.R_mm * math.cos(t2_rad)
-Cy_mm = CF.R_mm * math.sin(t2_rad)
+Cx_mm_t = CF.R_mm * math.cos(t2_rad)
+Cx_mm = D.Decimal( str(Cx_mm_t) )
+
+Cy_mm_t = CF.R_mm * math.sin(t2_rad)
+Cy_mm = D.Decimal( str(Cy_mm_t) )
 	
-H1_mm = math.sqrt( S_mm * S_mm - CF.R_mm * CF.R_mm )
-H2_mm = math.sqrt((H_mm+CF.R_mm)*(H_mm+CF.R_mm) - (H_mm*H_mm))
+H1_mm = D.Decimal(str(math.sqrt( S_mm * S_mm - CF.R_mm * CF.R_mm )))
+H2_mm = D.Decimal(str(math.sqrt((H_mm+CF.R_mm)*(H_mm+CF.R_mm) - (H_mm*H_mm))))
 
 	
-Z2_mm = (H2_mm-H1_mm)/2          # Coordinate of points (b-f)
-Z1_mm = Z2_mm + H1_mm            # Coordinate of point (a)	
+Z2_mm = D.Decimal((H2_mm-H1_mm)/2)          # Coordinate of points (b-f)
+Z1_mm = D.Decimal(Z2_mm + H1_mm)            # Coordinate of point (a)	
 
 
 #-------------------------------------------
@@ -87,7 +93,7 @@ gs = G.GeoSphere("Sphere", CF.frequency_n, CF.R_mm);
 
 # Icosahedron vertice coordinates
 a = C.Coordinates("a")
-a.Set_Cartesian( 0, 0, Z1_mm )
+a.Set_Cartesian( 0, 0, D.Decimal(Z1_mm) )
 a.Set_Point_Number( CF.nPoint )
 CF.nPoint += 1
 gs.Add_Vertex(a)
