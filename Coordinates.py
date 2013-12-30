@@ -12,8 +12,9 @@ class Coordinates(object):
     # int r, theta, phi
 
     # Tolerance for calculations
-    TINY = Decimal(1e-4)
-
+    #TINY = Decimal(1e-4)
+    TINY = Decimal('0.0001')
+ 	
     def __init__(self, n):
 
         self.x=Decimal(0)
@@ -32,17 +33,29 @@ class Coordinates(object):
         self.edge_count = 0
         
     def Set_Cartesian( self, a, b, c ):
-
-        self.x = Decimal(a).quantize(Decimal(10)**-10).normalize()
-        self.y = Decimal(b).quantize(Decimal(10)**-10).normalize()
-        self.z = Decimal(c).quantize(Decimal(10)**-10).normalize()
+    
+    	nbrd = Decimal('1e-10')
+    	
+    	#znew = Decimal(c)
+    	
+        self.x = Decimal(a).quantize(nbrd).normalize()
+        self.y = Decimal(b).quantize(nbrd).normalize()
+        
+        # This one is the issue. Data coming in is not a decimal???
+        print 'Decimal z: %.2f' % c
+        self.z = Decimal(c).quantize(nbrd).normalize()
 
         # Ensure that the coordinates always match
         # by recalculating the polar coords from the cartesian
-
-        self.r = Decimal( M.sqrt( self.x * self.x + self.y * self.y + self.z * self.z ) )
-        self.theta = Decimal( M.acos( self.z / self.r ) )
-        self.phi = Decimal( M.atan2( self.y , self.x ) )
+        
+        rtemp = M.sqrt( self.x * self.x + self.y * self.y + self.z * self.z )
+        self.r = Decimal( str( rtemp ) )
+        
+        thetatemp = M.acos( self.z / self.r )
+        self.theta = Decimal( str(thetatemp) )
+        
+        phitemp = M.atan2( self.y , self.x )
+        self.phi = Decimal( str(phitemp) )
 
     def Set_Radius( self, r):
 

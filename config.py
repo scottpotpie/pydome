@@ -16,4 +16,4 @@ nPoint = 1
 nEdge = 1
 nHub = 1
 
-TINY = Decimal(1e-4)
+TINY = Decimal('0.0001')
