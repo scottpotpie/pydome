@@ -1,0 +1,1 @@
+Calculates the coordinates and edge lengths of all points on a geodesic dome. The method of dividing the icosahedron faces can be done using either the equal lengths or equal angles method.
